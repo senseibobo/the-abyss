@@ -1,10 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=4]
-[ext_resource path="res://textures/bg1.png" type="Texture" id=5]
+[ext_resource path="res://world/env.tscn" type="PackedScene" id=5]
 
 [sub_resource type="ParticlesMaterial" id=4]
 emission_shape = 2
@@ -42,48 +42,6 @@ initial_velocity_random = 0.15
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 color = Color( 0.282353, 0.372549, 0.396078, 1 )
-
-[sub_resource type="Environment" id=1]
-background_mode = 4
-background_color = Color( 0.980392, 0, 0, 1 )
-ambient_light_color = Color( 1, 1, 1, 1 )
-auto_exposure_scale = 0.15
-auto_exposure_max_luma = 0.19
-auto_exposure_speed = 12.16
-glow_enabled = true
-glow_intensity = 6.21
-glow_strength = 0.56
-glow_bloom = 0.11
-glow_blend_mode = 0
-glow_bicubic_upscale = true
-glow_high_quality = true
-adjustment_enabled = true
-adjustment_brightness = 0.81
-adjustment_saturation = 0.8
-
-[sub_resource type="Shader" id=2]
-code = "shader_type canvas_item;
-
-uniform float minimum: hint_range(0.0,1.0) = 0.3;
-uniform float maximum: hint_range(0.0,10.0) = 3.0;
-uniform float grain: hint_range(0.0,1.0) = 0.2;
-
-float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
-}
-
-
-void fragment() {
-	COLOR.a = max(0.0,(distance(UV,vec2(0.5,0.5))-minimum)*maximum) + random(UV+TIME/1000000.0)*grain;
-}"
-
-[sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
-shader_param/minimum = 0.189
-shader_param/maximum = 2.35
-shader_param/grain = 0.058
 
 [node name="Node2D" type="Node2D"]
 
@@ -127,27 +85,4 @@ visibility_rect = Rect2( -3000, -3000, 6000, 6000 )
 process_material = SubResource( 7 )
 texture = SubResource( 6 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 1 )
-
-[node name="ScreenShader" type="CanvasLayer" parent="WorldEnvironment"]
-layer = 60
-
-[node name="vignette" type="ColorRect" parent="WorldEnvironment/ScreenShader"]
-visible = false
-material = SubResource( 3 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 1 )
-
-[node name="ParallaxBackground" type="ParallaxBackground" parent="WorldEnvironment"]
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="WorldEnvironment/ParallaxBackground"]
-motion_scale = Vector2( 0.6, 0.6 )
-motion_mirroring = Vector2( 3840, 2160 )
-
-[node name="Bg1" type="Sprite" parent="WorldEnvironment/ParallaxBackground/ParallaxLayer"]
-modulate = Color( 2, 0, 0, 1 )
-position = Vector2( 581, 243 )
-scale = Vector2( 2, 2 )
-texture = ExtResource( 5 )
+[node name="WorldEnvironment" parent="." instance=ExtResource( 5 )]

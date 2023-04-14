@@ -1,21 +1,34 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=2]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://player/PlayerCamera.gd" type="Script" id=4]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=5]
+[ext_resource path="res://world/env.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+
+uniform float angle: hint_range(-3.1415926,3.1415926) = 0.0;
+uniform float size: hint_range(0.0,6.29) = 0.5;
+uniform float strength: hint_range(0.0,10.0) = 1.5;
+uniform float dist: hint_range(0.0,1.0) = 0.5;
+
+void fragment() {
+	COLOR.a = 0.0;
+	
+	float a = (atan(UV.y-0.5,UV.x-0.5));
+	float d = mod(angle-a+3.1415926,3.1415926*2.0)+3.1415926;
+	if(abs(d) < size) COLOR.a = max(0.0,dist-distance(UV,vec2(0.5,0.5)))*strength;
+}"
 
 [sub_resource type="ShaderMaterial" id=8]
-
-[sub_resource type="Gradient" id=6]
-colors = PoolColorArray( 0, 0, 0, 0, 1, 1, 1, 1 )
-
-[sub_resource type="GradientTexture2D" id=7]
-gradient = SubResource( 6 )
-width = 400
-height = 400
-fill_from = Vector2( 0.475, 0.4625 )
+shader = SubResource( 9 )
+shader_param/angle = -0.32
+shader_param/size = 4.001
+shader_param/strength = 1.545
+shader_param/dist = 0.614
 
 [sub_resource type="Animation" id=4]
 length = 0.001
@@ -167,18 +180,31 @@ outlines = [ PoolVector2Array( 43, 113, 53, 225, 106, 229, 102, 96, 545, 96, 568
 
 [sub_resource type="Curve2D" id=3]
 _data = {
-"points": PoolVector2Array( -35.3928, 71.9754, 35.3928, -71.9754, 85, 170, -61.3854, 55.4992, 61.3854, -55.4992, 379, 22, -58.0219, 34.4768, 58.0219, -34.4768, 522, -143, -59.7036, 45.4084, 59.7036, -45.4084, 702, -221, 0, 0, 0, 0, 765.519, -293.314, 0, 0, 0, 0, 795, -356 )
+"points": PoolVector2Array( -35.3928, 71.9754, 35.3928, -71.9754, 85, 170, -61.3854, 55.4992, 61.3854, -55.4992, 379, 22, -58.0219, 34.4768, 58.0219, -34.4768, 522, -143 )
 }
 
 [sub_resource type="RectangleShape2D" id=5]
+
+[sub_resource type="Curve2D" id=10]
+_data = {
+"points": PoolVector2Array(  )
+}
 
 [node name="TutorialArea" type="Node2D"]
 
 [node name="Will" parent="." instance=ExtResource( 2 )]
 position = Vector2( 809, -391 )
 
+[node name="Light" type="ColorRect" parent="."]
+material = SubResource( 8 )
+margin_left = 429.0
+margin_top = -974.0
+margin_right = 1429.0
+margin_bottom = 26.0
+color = Color( 2, 2, 2, 1 )
+
 [node name="N" type="TileMap" parent="."]
-modulate = Color( 0, 0, 0, 1 )
+modulate = Color( 0.156863, 0.156863, 0.156863, 1 )
 scale = Vector2( 0.125, 0.125 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 128, 128 )
@@ -195,15 +221,6 @@ format = 1
 tile_data = PoolIntArray( -262144, 0, 196609, -262143, 0, 3, -262138, 0, 0, -196607, 0, 131073, -196606, 0, 3, -196602, 0, 65540, -196601, 0, 11, -196599, 0, 1, -196598, 0, 196611, -65537, 0, 196609, -131072, 0, 196611, -131070, 0, 65540, -131069, 0, 10, -131068, 0, 11, -131066, 0, 65544, -131065, 0, 131083, -131063, 0, 65536, -65535, 0, 196609, -65534, 0, 131080, -65533, 0, 131081, -65532, 0, 65542, -65531, 0, 10, -65530, 0, 65541, -65529, 0, 65542, -65528, 0, 6, -65527, 0, 131075, 2, 0, 196616, 3, 0, 131077, 4, 0, 131081, 5, 0, 131081, 6, 0, 131081, 7, 0, 131081, 8, 0, 131083, 65539, 0, 196616, 65540, 0, 131077, 65541, 0, 131081, 65542, 0, 131081, 65543, 0, 131078, 65544, 0, 196619, 131076, 0, 65544, 131077, 0, 131081, 131078, 0, 131081, 131079, 0, 131083, 196612, 0, 65544, 196613, 0, 131081, 196614, 0, 131081, 196615, 0, 131083, 262148, 0, 65544, 262149, 0, 131081, 262150, 0, 131081, 262151, 0, 131083, 327684, 0, 196616, 327685, 0, 196617, 327686, 0, 196617, 327687, 0, 196619 )
 script = ExtResource( 5 )
 grapple = true
-
-[node name="TextureRect" type="TextureRect" parent="."]
-material = SubResource( 8 )
-margin_left = 288.0
-margin_top = -478.0
-margin_right = 941.0
-margin_bottom = 167.0
-texture = SubResource( 7 )
-expand = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 78, 330 )
@@ -227,7 +244,6 @@ visible = false
 navpoly = SubResource( 1 )
 
 [node name="CameraPath" type="Path2D" parent="."]
-visible = false
 position = Vector2( -4, 23 )
 curve = SubResource( 3 )
 
@@ -237,3 +253,8 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 5 )
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 6 )]
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 10 )
