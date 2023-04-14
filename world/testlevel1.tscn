@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://tilesets/ground1.tres" type="TileSet" id=1]
+[ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=4]

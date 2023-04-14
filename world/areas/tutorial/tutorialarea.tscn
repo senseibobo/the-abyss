@@ -1,176 +1,84 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://tilesets/ground1.tres" type="TileSet" id=1]
+[ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=2]
 [ext_resource path="res://player/player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://player/PlayerCamera.gd" type="Script" id=4]
+[ext_resource path="res://player/camera/playercamera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=5]
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=6]
-
-[sub_resource type="Shader" id=9]
-code = "shader_type canvas_item;
-
-uniform float angle: hint_range(-3.1415926,3.1415926) = 0.0;
-uniform float size: hint_range(0.0,6.29) = 0.5;
-uniform float strength: hint_range(0.0,10.0) = 1.5;
-uniform float dist: hint_range(0.0,1.0) = 0.5;
-
-void fragment() {
-	COLOR.a = 0.0;
-	
-	float a = (atan(UV.y-0.5,UV.x-0.5));
-	float d = mod(angle-a+3.1415926,3.1415926*2.0)+3.1415926;
-	if(abs(d) < size) COLOR.a = max(0.0,dist-distance(UV,vec2(0.5,0.5)))*strength;
-}"
-
-[sub_resource type="ShaderMaterial" id=8]
-shader = SubResource( 9 )
-shader_param/angle = -0.32
-shader_param/size = 4.001
-shader_param/strength = 1.545
-shader_param/dist = 0.614
+[ext_resource path="res://assets/textures/pointlight.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/spotlight.png" type="Texture" id=8]
+[ext_resource path="res://world/tools/scenechanger.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Animation" id=4]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("PlayerCamera:path_to_player")
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Will:position:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ NodePath("../Will") ]
+"points": PoolRealArray( 809, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("PlayerCamera:mode")
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Will:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 1 ]
+"points": PoolRealArray( -391, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
 }
-tracks/2/type = "bezier"
-tracks/2/path = NodePath("Will:position:x")
+tracks/2/type = "value"
+tracks/2/path = NodePath("Will:active")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"points": PoolRealArray( 809, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0 )
-}
-tracks/3/type = "bezier"
-tracks/3/path = NodePath("Will:position:y")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"points": PoolRealArray( -391, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0 )
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Will:active")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ true ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("PlayerCamera:camera_speed")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 3.0 ]
 }
 
 [sub_resource type="Animation" id=2]
 resource_name = "beginning"
 length = 16.0
-tracks/0/type = "value"
-tracks/0/path = NodePath("PlayerCamera:path_to_player")
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Will:position:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 16 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ NodePath("../Will"), NodePath("../Player") ]
+"points": PoolRealArray( 816, -0.25, 0, 0.4, -0.183472, 809, -0.2, 0.539795, 0.2, -2.98346, 777.116, -0.5, 10.5915, 0.4, -31.5302, 702, -0.0999999, 16.4417, 0.788647, -17.0393, 646, -0.8, 13.8434, 0.570455, -6.30096, 503, -0.398752, 8.74417, 0.470612, -8.69839, 490, -0.25, 0, 0.395651, -14.0713, 428, -0.179664, 11.3026, 0.220336, -10.4037, 396, -0.25, 0, 0.207325, -9.14487, 300, -0.25737, 7.54941, 0.64263, -8.73035, 287, -0.35721, 2.87421, 0.471252, -11.5451, 172, -0.241187, 8.79961, 0.562234, -7.01511, 159, -0.25, 0, 0.262234, -7.50404, 93, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1, 1.9, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("PlayerCamera:mode")
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Will:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 16 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ 1, 2 ]
+"points": PoolRealArray( -390, -0.25, 0, 0.25, 0, -311, -0.8, -18.2916, 0.80933, 21.5645, -252, -0.531459, -11.404, 0.668541, 3.93967, -243, -0.531459, -0.854431, 0.8, 32.2703, -135, -0.25, 0, 0.8, -11.8258, -154, -0.25, 0, 0.6, 27.4288, -70, -0.605143, -33.7642, 0.25, 0, 0, -0.546498, -18.9322, 0.329709, 20.9984, 106, -0.613367, -19.0294, 0.586634, -11.5063, 72, -0.513367, 3.97521, 0.386633, 10.341, 155, -0.513367, -17.1035, 0.486633, -12.4738, 111, -0.566549, 6.06324, 0.633451, 18.216, 190, -0.494851, -11.5941, 0.505149, 11.5541, 221, -0.372484, 5.28885, 0.327517, -5.17671 ),
+"times": PoolRealArray( 0, 1, 2.1, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
 }
-tracks/2/type = "bezier"
-tracks/2/path = NodePath("Will:position:x")
+tracks/2/type = "value"
+tracks/2/path = NodePath("Will:active")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"points": PoolRealArray( 816, -0.25, 0, 0.4, -0.183472, 809, -0.2, 0.539795, 0.2, -2.98346, 777.116, -0.5, 10.5915, 0.4, -31.5302, 702, -0.0999999, 16.4417, 0.788647, -17.0393, 646, -0.8, 13.8434, 0.570455, -6.30096, 503, -0.398752, 8.74417, 0.470612, -8.69839, 490, -0.25, 0, 0.395651, -14.0713, 428, -0.179664, 11.3026, 0.220336, -10.4037, 396, -0.25, 0, 0.207325, -9.14487, 300, -0.25737, 7.54941, 0.64263, -8.73035, 287, -0.35721, 2.87421, 0.471252, -11.5451, 172, -0.241187, 8.79961, 0.562234, -7.01511, 159, -0.25, 0, 0.262234, -7.50404, 93, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 1, 1.9, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
-}
-tracks/3/type = "bezier"
-tracks/3/path = NodePath("Will:position:y")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"points": PoolRealArray( -390, -0.25, 0, 0.25, 0, -311, -0.8, -18.2916, 0.80933, 21.5645, -252, -0.531459, -11.404, 0.668541, 3.93967, -243, -0.531459, -0.854431, 0.8, 32.2703, -135, -0.25, 0, 0.8, -11.8258, -154, -0.25, 0, 0.6, 27.4288, -70, -0.605143, -33.7642, 0.25, 0, 0, -0.546498, -18.9322, 0.329709, 20.9984, 106, -0.613367, -19.0294, 0.586634, -11.5063, 72, -0.513367, 3.97521, 0.386633, 10.341, 155, -0.513367, -17.1035, 0.486633, -12.4738, 111, -0.566549, 6.06324, 0.633451, 18.216, 190, -0.494851, -11.5941, 0.505149, 11.5541, 221, -0.372484, 5.28885, 0.327517, -5.17671 ),
-"times": PoolRealArray( 0, 1, 2.1, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Will:active")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
 "times": PoolRealArray( 16 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("PlayerCamera:camera_speed")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0, 16 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 1.5, 3.0 ]
 }
 
 [sub_resource type="NavigationPolygon" id=1]
@@ -180,10 +88,8 @@ outlines = [ PoolVector2Array( 43, 113, 53, 225, 106, 229, 102, 96, 545, 96, 568
 
 [sub_resource type="Curve2D" id=3]
 _data = {
-"points": PoolVector2Array( -35.3928, 71.9754, 35.3928, -71.9754, 85, 170, -61.3854, 55.4992, 61.3854, -55.4992, 379, 22, -58.0219, 34.4768, 58.0219, -34.4768, 522, -143 )
+"points": PoolVector2Array( -12.6134, 114.362, 12.6134, -114.362, 88, 225, -100.067, 52.1356, 100.067, -52.1356, 354, 83, -81.567, 27.7496, 81.567, -27.7496, 470, -122, -38.6812, 29.4314, 38.6812, -29.4314, 558, -173 )
 }
-
-[sub_resource type="RectangleShape2D" id=5]
 
 [sub_resource type="Curve2D" id=10]
 _data = {
@@ -195,13 +101,11 @@ _data = {
 [node name="Will" parent="." instance=ExtResource( 2 )]
 position = Vector2( 809, -391 )
 
-[node name="Light" type="ColorRect" parent="."]
-material = SubResource( 8 )
-margin_left = 429.0
-margin_top = -974.0
-margin_right = 1429.0
-margin_bottom = 26.0
-color = Color( 2, 2, 2, 1 )
+[node name="ExitLight" type="Sprite" parent="."]
+position = Vector2( 596, -122 )
+rotation = 0.806342
+scale = Vector2( 0.288, 1 )
+texture = ExtResource( 8 )
 
 [node name="N" type="TileMap" parent="."]
 modulate = Color( 0.156863, 0.156863, 0.156863, 1 )
@@ -225,12 +129,8 @@ grapple = true
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 78, 330 )
 
-[node name="PlayerCamera" type="Camera2D" parent="."]
-current = true
-script = ExtResource( 4 )
-path_to_player = NodePath("../Will")
-path_to_camera_path = NodePath("../CameraPath")
-path_to_camera_area = NodePath("../CameraArea")
+[node name="Light2D" type="Light2D" parent="Player"]
+texture = ExtResource( 7 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "beginning"
@@ -247,14 +147,16 @@ navpoly = SubResource( 1 )
 position = Vector2( -4, 23 )
 curve = SubResource( 3 )
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 5 )
+[node name="SceneChanger" parent="." instance=ExtResource( 9 )]
+scene_path = "res://world/testlevel1.tscn"
 
 [node name="WorldEnvironment" parent="." instance=ExtResource( 6 )]
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource( 10 )
+
+[node name="PlayerCamera" parent="." instance=ExtResource( 4 )]
+position = Vector2( 541, -155 )
+path_to_player = NodePath("../Will")
+path_to_camera_path = NodePath("../CameraPath")
+path_to_camera_area = NodePath("../CameraArea")

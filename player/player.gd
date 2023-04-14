@@ -53,12 +53,12 @@ func _ready():
 	Global.player = self
 	#add_camera()
 
-func add_camera():
-	var camera = preload("res://player/PlayerCamera.gd").new()
-	get_parent().call_deferred("add_child",camera)
-	camera.player = self
-	camera.name = "PlayerCamera"
-	camera.current = true
+#func add_camera():
+#	var camera = preload("res://player/camera/playercamera.gd").new()
+#	get_parent().call_deferred("add_child",camera)
+#	camera.player = self
+#	camera.name = "PlayerCamera"
+#	camera.current = true
 
 func attach_to_will():
 	state = STATE.ATTACHED
