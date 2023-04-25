@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://world/tools/fog.gd" type="Script" id=1]
+
+[sub_resource type="Shader" id=2]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise;
+uniform float r = 2.0;
+uniform vec2 camera_position;
+uniform float density: hint_range(0.0,1.0) = 0.6;
+
+void fragment() {
+	vec2 NUV = SCREEN_UV;
+	vec2 px = TEXTURE_PIXEL_SIZE*r;
+	COLOR.a = density - texture(noise,NUV+camera_position/vec2(600.0,-360.0)+TIME/50.0).r;
+	vec2 np = UV;
+	np.x = clamp(np.x,0.1*px.x,1.0-0.1*px.x);
+	np.y = clamp(np.y,0.1*px.y,1.0-0.1*px.y);
+	COLOR.a -= distance(np,UV)*5.0;
+	COLOR.a = max(COLOR.a,0.0);
+}"
+
+[sub_resource type="OpenSimplexNoise" id=4]
+octaves = 2
+period = 24.3
+persistence = 1.0
+lacunarity = 0.1
+
+[sub_resource type="NoiseTexture" id=5]
+seamless = true
+noise = SubResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/r = 2.227
+shader_param/camera_position = null
+shader_param/density = 0.6
+shader_param/noise = SubResource( 5 )
+
+[node name="Fog" type="Node2D"]
+z_index = 19
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource( 3 )
+margin_left = -400.0
+margin_top = -400.0
+margin_right = 400.0
+margin_bottom = 400.0

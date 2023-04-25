@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=2]
+
+[sub_resource type="ParticlesMaterial" id=4]
+emission_shape = 2
+emission_box_extents = Vector3( 2000, 0, 0 )
+flag_align_y = true
+flag_disable_z = true
+direction = Vector3( 0.456, 1, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 607.21
+initial_velocity_random = 0.46
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 0.282353, 0.372549, 0.396078, 1 )
+
+[sub_resource type="Gradient" id=5]
+
+[sub_resource type="GradientTexture2D" id=6]
+gradient = SubResource( 5 )
+width = 2
+height = 10
+fill = 1
+fill_from = Vector2( 0.945833, 0.0171875 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 2
+emission_box_extents = Vector3( 2000, 0, 0 )
+flag_align_y = true
+flag_disable_z = true
+direction = Vector3( 0.456, 1, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 895.5
+initial_velocity_random = 0.15
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 0.282353, 0.372549, 0.396078, 1 )
+
+[node name="Rain" type="Node2D"]
+
+[node name="Back" type="Particles2D" parent="."]
+position = Vector2( 0, -272 )
+amount = 2118
+lifetime = 5.0
+visibility_rect = Rect2( -3000, -3000, 6000, 6000 )
+process_material = SubResource( 4 )
+texture = SubResource( 6 )
+
+[node name="Front" type="Particles2D" parent="."]
+position = Vector2( 0, -272 )
+z_index = 10
+amount = 2118
+lifetime = 2.34
+visibility_rect = Rect2( -3000, -3000, 6000, 6000 )
+process_material = SubResource( 7 )
+texture = SubResource( 6 )

@@ -1,12 +1,11 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=2]
-[ext_resource path="res://player/player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://player/camera/playercamera.tscn" type="PackedScene" id=4]
+[ext_resource path="res://characters/player/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=5]
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/textures/pointlight.png" type="Texture" id=7]
 [ext_resource path="res://assets/textures/spotlight.png" type="Texture" id=8]
 [ext_resource path="res://world/tools/scenechanger.tscn" type="PackedScene" id=9]
 
@@ -47,7 +46,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id=2]
 resource_name = "beginning"
-length = 16.0
+length = 17.0
 tracks/0/type = "bezier"
 tracks/0/path = NodePath("Will:position:x")
 tracks/0/interp = 1
@@ -55,8 +54,8 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( 816, -0.25, 0, 0.4, -0.183472, 809, -0.2, 0.539795, 0.2, -2.98346, 777.116, -0.5, 10.5915, 0.4, -31.5302, 702, -0.0999999, 16.4417, 0.788647, -17.0393, 646, -0.8, 13.8434, 0.570455, -6.30096, 503, -0.398752, 8.74417, 0.470612, -8.69839, 490, -0.25, 0, 0.395651, -14.0713, 428, -0.179664, 11.3026, 0.220336, -10.4037, 396, -0.25, 0, 0.207325, -9.14487, 300, -0.25737, 7.54941, 0.64263, -8.73035, 287, -0.35721, 2.87421, 0.471252, -11.5451, 172, -0.241187, 8.79961, 0.562234, -7.01511, 159, -0.25, 0, 0.262234, -7.50404, 93, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 1, 1.9, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
+"points": PoolRealArray( 816, -0.25, 0, 0.4, -0.183472, 809, -0.2, 0.539795, 0.2, -2.98346, 777.116, -0.5, 10.5915, 0.4, -31.5302, 702, -0.0999999, 16.4417, 0.788647, -17.0393, 646, -0.8, 13.8434, 0.570455, -6.30096, 503, -0.398752, 8.74417, 0.470612, -8.69839, 490, -0.25, 0, 0.395651, -14.0713, 428, -0.179664, 11.3026, 0.220336, -10.4037, 382.663, -0.0849428, 2.78601, 0.315056, -8.33334, 300, -0.25737, 7.54941, 0.665056, -22.3373, 260.996, -0.434944, 10, 0.465055, -17.5, 172, -0.241187, 8.79961, 0.562234, -7.01511, 159, -0.25, 0, 0.262234, -7.50404, 93, -0.25, 0, 0.25, 0, 82, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1, 2.1, 3.5, 4.8, 6.4, 7.7, 8.5, 9.6, 10.6, 12, 13.3, 14.4, 16, 17 )
 }
 tracks/1/type = "bezier"
 tracks/1/path = NodePath("Will:position:y")
@@ -65,8 +64,8 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"points": PoolRealArray( -390, -0.25, 0, 0.25, 0, -311, -0.8, -18.2916, 0.80933, 21.5645, -252, -0.531459, -11.404, 0.668541, 3.93967, -243, -0.531459, -0.854431, 0.8, 32.2703, -135, -0.25, 0, 0.8, -11.8258, -154, -0.25, 0, 0.6, 27.4288, -70, -0.605143, -33.7642, 0.25, 0, 0, -0.546498, -18.9322, 0.329709, 20.9984, 106, -0.613367, -19.0294, 0.586634, -11.5063, 72, -0.513367, 3.97521, 0.386633, 10.341, 155, -0.513367, -17.1035, 0.486633, -12.4738, 111, -0.566549, 6.06324, 0.633451, 18.216, 190, -0.494851, -11.5941, 0.505149, 11.5541, 221, -0.372484, 5.28885, 0.327517, -5.17671 ),
-"times": PoolRealArray( 0, 1, 2.1, 3, 4.6, 6.1, 7.3, 8.3, 9.5, 10.6, 12, 13.3, 14.4, 16 )
+"points": PoolRealArray( -390, -0.25, 0, 0.25, 0, -311, -0.8, -18.2916, 0.80933, 21.5645, -252, -0.531459, -11.404, 0.668541, 3.93967, -243, -0.531459, -0.854431, 0.8, 32.2703, -135, -0.25, 0, 0.8, -11.8258, -154, -0.25, 0, 0.6, 27.4288, -70, -0.605143, -33.7642, 0.25, 0, 0, -0.546498, -18.9322, 0.329709, 20.9984, 88.6619, -0.613367, -19.0294, 0.745056, -7.70266, 76.9405, -0.513367, 3.97521, 0.386633, 10.341, 134.878, -0.513367, -17.1035, 0.515057, -3.68388, 125.166, -0.566549, 6.06324, 0.633451, 18.216, 163.452, -0.494851, -11.5941, 0.505149, 11.5541, 208.452, -0.294944, -13.3333, 0.327517, -5.17671, 300, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1, 2.1, 3.5, 4.8, 6.4, 7.7, 8.5, 9.6, 10.6, 11.9, 13.2, 14.3, 16, 17 )
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Will:active")
@@ -75,7 +74,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 16 ),
+"times": PoolRealArray( 17 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ true ]
@@ -127,13 +126,11 @@ script = ExtResource( 5 )
 grapple = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 78, 330 )
-
-[node name="Light2D" type="Light2D" parent="Player"]
-texture = ExtResource( 7 )
+position = Vector2( 712, -213 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "beginning"
+playback_speed = 22.14
 anims/RESET = SubResource( 4 )
 anims/beginning = SubResource( 2 )
 
@@ -144,15 +141,17 @@ visible = false
 navpoly = SubResource( 1 )
 
 [node name="CameraPath" type="Path2D" parent="."]
+visible = false
 position = Vector2( -4, 23 )
 curve = SubResource( 3 )
 
 [node name="SceneChanger" parent="." instance=ExtResource( 9 )]
-scene_path = "res://world/testlevel1.tscn"
+scene_path = "res://world/areas/lobby/lobby.tscn"
 
 [node name="WorldEnvironment" parent="." instance=ExtResource( 6 )]
 
 [node name="Path2D" type="Path2D" parent="."]
+visible = false
 curve = SubResource( 10 )
 
 [node name="PlayerCamera" parent="." instance=ExtResource( 4 )]

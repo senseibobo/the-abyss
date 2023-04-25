@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Character
 class_name Player
 
 enum STATE {
@@ -8,6 +8,8 @@ enum STATE {
 	ATTACHED,
 	INACTIVE
 }
+
+onready var cr = $ColorRect
 
 export(STATE) var state: int = STATE.AIR
 var velocity: Vector2
@@ -47,7 +49,8 @@ func _physics_process(delta: float) -> void:
 			print(velocity)
 			if test_move(get_transform(),Vector2()) or Input.is_action_just_pressed("jump"):
 				detach_from_will()
-
+func _process(delta: float) -> void:
+	hit_timer = move_toward(hit_timer, 0.0, delta)
 
 func _ready():
 	Global.player = self
@@ -67,6 +70,15 @@ func detach_from_will():
 	Global.will.player_detached()
 	
 	
-	
-		
+var hit_timer: float = 0.0
+var hit_invincibility: float = 0.5
+
+func hit():
+	health -= 20.0
+	hit_timer = hit_invincibility
+	var tween = create_tween()
+	cr.color = Color.red
+	tween.tween_property(cr,"color",Color.white,0.2)
+	Global.camera.shake(7,2.0,0.3)
+	print("the player has been hit.")
 	

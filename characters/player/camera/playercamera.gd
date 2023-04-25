@@ -29,6 +29,7 @@ onready var camera_path : Path2D = get_node_or_null(path_to_camera_path)
 onready var camera_area : Navigation2D = get_node_or_null(path_to_camera_area)
 
 func _ready(): 
+	Global.camera = self
 	process_mode = Camera2D.CAMERA2D_PROCESS_IDLE
 	if path_to_player:
 		player = get_node(path_to_player)
@@ -50,4 +51,27 @@ func _physics_process(delta):
 		global_position = lerp(global_position, new_position, camera_speed*delta)
 	else:
 		global_position = global_position.move_toward(new_position,camera_speed*delta)
+		
+	process_shake(delta)
+
+var shake_duration: float
+var shake_time: float
+var shake_magnitude: float
+var shake_frequency: float
+
+var noise = OpenSimplexNoise.new()
+
+func process_shake(delta):
+	if shake_time <= 0.0: return
+	noise.seed = randi()
+	offset.x = (noise.get_noise_1d(shake_time*100.0*shake_frequency)-0.5)*shake_magnitude*shake_time/shake_duration
+	offset.y = (noise.get_noise_1d(-shake_time*100.0*shake_frequency)-0.5)*shake_magnitude*shake_time/shake_duration
+	shake_time -= delta
+
+func shake(magnitude,frequency,time):
+	shake_duration = time
+	shake_time = time
+	shake_magnitude = magnitude
+	shake_frequency = frequency
+	
 		

@@ -1,57 +1,15 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=1]
-[ext_resource path="res://player/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://characters/player/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=4]
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=5]
-
-[sub_resource type="ParticlesMaterial" id=4]
-emission_shape = 2
-emission_box_extents = Vector3( 2000, 0, 0 )
-flag_align_y = true
-flag_disable_z = true
-direction = Vector3( 0.456, 1, 0 )
-spread = 0.0
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 607.21
-initial_velocity_random = 0.46
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-color = Color( 0.282353, 0.372549, 0.396078, 1 )
-
-[sub_resource type="Gradient" id=5]
-
-[sub_resource type="GradientTexture2D" id=6]
-gradient = SubResource( 5 )
-width = 2
-height = 10
-fill = 1
-fill_from = Vector2( 0.945833, 0.0171875 )
-
-[sub_resource type="ParticlesMaterial" id=7]
-emission_shape = 2
-emission_box_extents = Vector3( 2000, 0, 0 )
-flag_align_y = true
-flag_disable_z = true
-direction = Vector3( 0.456, 1, 0 )
-spread = 0.0
-gravity = Vector3( 0, 0, 0 )
-initial_velocity = 895.5
-initial_velocity_random = 0.15
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-color = Color( 0.282353, 0.372549, 0.396078, 1 )
+[ext_resource path="res://world/tools/Rain.tscn" type="PackedScene" id=6]
+[ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=7]
+[ext_resource path="res://characters/enemies/fly.tscn" type="PackedScene" id=8]
 
 [node name="Node2D" type="Node2D"]
-
-[node name="Rain" type="Particles2D" parent="."]
-position = Vector2( 0, -272 )
-amount = 2118
-lifetime = 5.0
-visibility_rect = Rect2( -3000, -3000, 6000, 6000 )
-process_material = SubResource( 4 )
-texture = SubResource( 6 )
 
 [node name="N" type="TileMap" parent="."]
 modulate = Color( 0, 0, 0, 1 )
@@ -77,12 +35,14 @@ position = Vector2( 178, 57 )
 
 [node name="Will" parent="." instance=ExtResource( 3 )]
 
-[node name="Rain2" type="Particles2D" parent="."]
-position = Vector2( 0, -272 )
-amount = 2118
-lifetime = 2.34
-visibility_rect = Rect2( -3000, -3000, 6000, 6000 )
-process_material = SubResource( 7 )
-texture = SubResource( 6 )
-
 [node name="WorldEnvironment" parent="." instance=ExtResource( 5 )]
+
+[node name="Rain" parent="." instance=ExtResource( 6 )]
+
+[node name="Fly" parent="." instance=ExtResource( 8 )]
+position = Vector2( 122, 22 )
+
+[node name="PlayerCamera" parent="." instance=ExtResource( 7 )]
+position = Vector2( 181, 40 )
+mode = 0
+path_to_player = NodePath("../Player")
