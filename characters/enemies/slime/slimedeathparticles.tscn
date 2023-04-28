@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://characters/enemies/deathparticles.gd" type="Script" id=1]
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0.382857, 1 )
+colors = PoolColorArray( 1, 0.530273, 0, 1, 1, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 1 ), 0.0, -3.204, 0, 0, Vector2( 0.525253, 0.335227 ), -0.675, -0.675, 0, 0, Vector2( 1, 0.0090909 ), -0.0339622, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 2
+emission_box_extents = Vector3( 10, 15, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 171.17
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 23.68
+scale_curve = SubResource( 3 )
+color_ramp = SubResource( 6 )
+
+[node name="FlyDeathParticles" type="Particles2D"]
+emitting = false
+amount = 88
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.87
+process_material = SubResource( 7 )
+script = ExtResource( 1 )

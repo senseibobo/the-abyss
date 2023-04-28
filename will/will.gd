@@ -64,7 +64,7 @@ func _physics_process_grappling(delta):
 	global_position = global_position.move_toward(line_pos,grapple_speed*delta)
 	if global_position.distance_to(line_pos) < 10.0:
 		state = STATE.IDLE
-		player.detach_from_will()
+		Global.player.detach_from_will()
 		return_line()
 
 func _physics_process(delta: float) -> void:
@@ -73,7 +73,7 @@ func _physics_process(delta: float) -> void:
 		STATE.GRAPPLING: _physics_process_grappling(delta)
 		STATE.SWINGING: _physics_process_swinging(delta)
 		STATE.TRAVELLING: _physics_process_travelling(delta)
-		STATE.IDLE: _physics_process_idle(delta)
+		STATE.IDLE, STATE.RETURNING: _physics_process_idle(delta)
 
 
 var line_pos: Vector2
@@ -84,22 +84,22 @@ func _process_travelling(delta):
 	var new_pos = line_pos + line_dir*line_speed*delta
 	line_pos = new_pos
 	var space_state = get_world_2d().direct_space_state
-	var result = space_state.intersect_ray(old_pos, new_pos, [], 1)
+	var result = space_state.intersect_ray(old_pos, new_pos, [], 2049)
 	if result:
 		var body = result.collider
 		match throw_mode:
 			THROW.GRAPPLE:
 				if body.grapple:
-					body.grappled_to()
 					state = STATE.GRAPPLING
 					Global.player.attach_to_will()
+					body.grappled_to()
 				else:
 					return_line()
 			THROW.SWING:
 				if body.swing:
-					body.swung_from()
 					state = STATE.SWINGING
 					Global.player.attach_to_will()
+					body.swung_from()
 				else:
 					return_line()
 			_:

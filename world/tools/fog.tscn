@@ -1,19 +1,27 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://world/tools/fog.gd" type="Script" id=1]
 
-[sub_resource type="Shader" id=2]
+[sub_resource type="Shader" id=7]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise;
+uniform sampler2D noise2;
 uniform float r = 2.0;
 uniform vec2 camera_position;
 uniform float density: hint_range(0.0,1.0) = 0.6;
 
+float tw(float a) {
+	return mod(a+0.5,1.0)-0.5;
+}
+
 void fragment() {
 	vec2 NUV = SCREEN_UV;
 	vec2 px = TEXTURE_PIXEL_SIZE*r;
-	COLOR.a = density - texture(noise,NUV+camera_position/vec2(600.0,-360.0)+TIME/50.0).r;
+	vec2 offset = vec2(texture(noise,vec2(TIME)).r);
+	float n1 = texture(noise,NUV+camera_position/vec2(600.0,-360.0)-mod(TIME/20.0,1.0)).r;
+	float n2 = texture(noise,NUV+camera_position/vec2(600.0,-360.0)+TIME/50.0).r;
+	COLOR.a = density - abs(n1*n2+0.1);
 	vec2 np = UV;
 	np.x = clamp(np.x,0.1*px.x,1.0-0.1*px.x);
 	np.y = clamp(np.y,0.1*px.y,1.0-0.1*px.y);
@@ -27,16 +35,28 @@ period = 24.3
 persistence = 1.0
 lacunarity = 0.1
 
-[sub_resource type="NoiseTexture" id=5]
+[sub_resource type="NoiseTexture" id=8]
 seamless = true
 noise = SubResource( 4 )
 
+[sub_resource type="OpenSimplexNoise" id=6]
+seed = 9
+octaves = 2
+period = 24.3
+persistence = 1.0
+lacunarity = 0.1
+
+[sub_resource type="NoiseTexture" id=9]
+as_normalmap = true
+noise = SubResource( 6 )
+
 [sub_resource type="ShaderMaterial" id=3]
-shader = SubResource( 2 )
+shader = SubResource( 7 )
 shader_param/r = 2.227
 shader_param/camera_position = null
 shader_param/density = 0.6
-shader_param/noise = SubResource( 5 )
+shader_param/noise = SubResource( 8 )
+shader_param/noise2 = SubResource( 9 )
 
 [node name="Fog" type="Node2D"]
 z_index = 19

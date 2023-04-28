@@ -46,7 +46,6 @@ func _physics_process(delta: float) -> void:
 			global_position = Global.will.global_position - Global.will.offset_travelling*0.8
 			if delta != 0:
 				velocity = (global_position - old_pos)/delta
-			print(velocity)
 			if test_move(get_transform(),Vector2()) or Input.is_action_just_pressed("jump"):
 				detach_from_will()
 func _process(delta: float) -> void:
@@ -55,6 +54,17 @@ func _process(delta: float) -> void:
 func _ready():
 	Global.player = self
 	#add_camera()
+
+var crippled = false
+
+func shockwaved():
+	var sp = move_speed
+	move_speed /= 2
+	crippled = true
+	var tween = create_tween()
+	tween.tween_property(self,"move_speed",sp,1.0)
+	tween.tween_property(self,"crippled",true,0.0)
+	
 
 #func add_camera():
 #	var camera = preload("res://player/camera/playercamera.gd").new()

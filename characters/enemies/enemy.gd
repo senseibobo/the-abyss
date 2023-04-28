@@ -9,3 +9,6 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	Global.enemies.erase(self)
+
+func death():
+	queue_free()

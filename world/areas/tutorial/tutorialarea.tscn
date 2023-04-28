@@ -126,11 +126,10 @@ script = ExtResource( 5 )
 grapple = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 712, -213 )
+position = Vector2( 83, 359 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "beginning"
-playback_speed = 22.14
 anims/RESET = SubResource( 4 )
 anims/beginning = SubResource( 2 )
 

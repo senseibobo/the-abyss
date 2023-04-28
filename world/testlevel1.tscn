@@ -7,7 +7,7 @@
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=5]
 [ext_resource path="res://world/tools/Rain.tscn" type="PackedScene" id=6]
 [ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=7]
-[ext_resource path="res://characters/enemies/fly.tscn" type="PackedScene" id=8]
+[ext_resource path="res://characters/enemies/fly/fly.tscn" type="PackedScene" id=8]
 
 [node name="Node2D" type="Node2D"]
 
