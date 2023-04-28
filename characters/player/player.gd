@@ -19,6 +19,7 @@ var move_speed: float = 150.0
 #export var active: bool = true
 
 func _physics_process(delta: float) -> void:
+	if dead: return
 	var move = Input.get_axis("move_left","move_right")
 	match state:
 		STATE.AIR:
@@ -49,21 +50,29 @@ func _physics_process(delta: float) -> void:
 			if test_move(get_transform(),Vector2()) or Input.is_action_just_pressed("jump"):
 				detach_from_will()
 func _process(delta: float) -> void:
+	ui.update_health(health)
+	if dead: return
 	hit_timer = move_toward(hit_timer, 0.0, delta)
 
+var ui
+
 func _ready():
+	ui = preload("res://global/ui.tscn").instance()
+	add_child(ui)
 	Global.player = self
 	#add_camera()
 
 var crippled = false
 
+
 func shockwaved():
 	var sp = move_speed
-	move_speed /= 2
+	move_speed /= 3
 	crippled = true
-	var tween = create_tween()
-	tween.tween_property(self,"move_speed",sp,1.0)
+	var tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self,"move_speed",sp,2.0)
 	tween.tween_property(self,"crippled",true,0.0)
+	Global.camera.shake(20.0,3.0,1.0)
 	
 
 #func add_camera():
@@ -84,11 +93,26 @@ var hit_timer: float = 0.0
 var hit_invincibility: float = 0.5
 
 func hit():
+	if dead: return
+	if hit_timer > 0: return
 	health -= 20.0
+	if health <= 0.0:
+		death()
 	hit_timer = hit_invincibility
 	var tween = create_tween()
 	cr.color = Color.red
 	tween.tween_property(cr,"color",Color.white,0.2)
 	Global.camera.shake(7,2.0,0.3)
 	print("the player has been hit.")
+
+
+var dead: bool = false
+func death():
+	dead = true
+	$DeathParticles.emitting = true
+	$ColorRect.visible = false
+	var tween = create_tween()
+	tween.tween_property($Light2D,"texture_scale",0.0,0.5)
+	var death = preload("res://mechanics/death.tscn").instance()
+	get_parent().add_child(death)
 	

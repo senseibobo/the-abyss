@@ -3,10 +3,11 @@ extends Enemy
 enum STATE {
 	IDLE,
 	CHARGING,
-	JUMPING
+	JUMPING,
+	FALLING
 }
 
-var state: int = STATE.IDLE
+var state: int = STATE.FALLING
 
 var velocity: Vector2
 
@@ -17,7 +18,7 @@ var gravity: float = 800.0
 var charge_amount: float
 var charge_speed: float = 1.0
 
-const vision_range: float = 200.0
+export var vision_range: float = 200.0
 
 func hit():
 	$HitParticles.emitting = true
@@ -28,7 +29,17 @@ func hit():
 
 
 func _physics_process(delta: float) -> void:
+	if global_position.y > 5000.0:
+		death()
 	match state:
+		STATE.FALLING:
+			$AnimationPlayer.play("idle")
+			$AnimationPlayer.playback_speed = 1.0
+			velocity.y += gravity*delta
+			velocity.x = 0
+			velocity = move_and_slide(velocity, Vector2.UP)
+			if is_on_floor():
+				state = STATE.IDLE
 		STATE.IDLE:
 			$AnimationPlayer.play("idle")
 			$AnimationPlayer.playback_speed = 1.0
@@ -47,7 +58,7 @@ func _physics_process(delta: float) -> void:
 			$AnimationPlayer.play("jump")
 			$AnimationPlayer.playback_speed = 1.0
 			velocity.y += gravity*delta
-			velocity = move_and_slide(velocity,Vector2.UP)
+			velocity.y = move_and_slide(velocity,Vector2.UP).y
 			if is_on_floor():
 				state = STATE.CHARGING
 			

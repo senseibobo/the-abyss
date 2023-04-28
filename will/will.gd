@@ -68,6 +68,7 @@ func _physics_process_grappling(delta):
 		return_line()
 
 func _physics_process(delta: float) -> void:
+	if Global.player.dead: return
 	if not active: return
 	match state:
 		STATE.GRAPPLING: _physics_process_grappling(delta)
@@ -117,6 +118,7 @@ func _process_returning(delta):
 
 
 func _process(delta):
+	if Global.player.dead: return
 	if not active: return
 	cd = move_toward(cd, 0.0, delta)
 	match state:

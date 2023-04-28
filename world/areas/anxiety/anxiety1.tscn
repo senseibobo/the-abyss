@@ -1,22 +1,41 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=1]
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=2]
 [ext_resource path="res://characters/enemies/fly/fly.tscn" type="PackedScene" id=3]
 [ext_resource path="res://characters/player/player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://world/tools/Rain.tscn" type="PackedScene" id=5]
 [ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=7]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=8]
 [ext_resource path="res://world/tools/scenechanger.tscn" type="PackedScene" id=9]
 
 [sub_resource type="NavigationPolygon" id=1]
-vertices = PoolVector2Array( -311, -206, -299, -188, -1081, -196, -1085, -213, -1179, -95, -1211, -203, -1084, -105, -765, 1, -950, -92, -572, -34, -284, 97, 60, -24, 58, 66 )
+vertices = PoolVector2Array( -311, -206, -299, -188, -1081, -196, -1085, -213, -1179, -95, -1211, -203, -1084, -105, -765, 1, -950, -92, -572, -34, -284, 97, 57, -26, 60, 55 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 4, 5, 3, 2, 6 ), PoolIntArray( 7, 4, 6, 8, 9, 10 ), PoolIntArray( 10, 9, 11, 12 ) ]
-outlines = [ PoolVector2Array( -1179, -95, -1211, -203, -1085, -213, -311, -206, -299, -188, -1081, -196, -1084, -105, -950, -92, -572, -34, 60, -24, 58, 66, -284, 97, -765, 1 ) ]
+outlines = [ PoolVector2Array( -1179, -95, -1211, -203, -1085, -213, -311, -206, -299, -188, -1081, -196, -1084, -105, -950, -92, -572, -34, 57, -26, 60, 55, -284, 97, -765, 1 ) ]
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 155.5, 34.75 )
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0 ), 0.0, 2.76136, 0, 0, Vector2( 1, 0 ), -2.2875, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=11]
+curve = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=10]
+trail_divisor = 11
+emission_shape = 2
+emission_box_extents = Vector3( 2000, 300, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 44.51
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.74
+scale_curve = SubResource( 11 )
+color = Color( 3, 0, 0, 1 )
 
 [node name="Anxiety1" type="Node2D"]
 
@@ -51,9 +70,6 @@ modulate = Color( 1, 0, 0, 1 )
 
 [node name="ColorRect" parent="WorldEnvironment/PlayerFog" index="0"]
 color = Color( 0, 0, 0, 1 )
-
-[node name="Rain" parent="." instance=ExtResource( 5 )]
-position = Vector2( 0, -208 )
 
 [node name="PlayerCamera" parent="." instance=ExtResource( 6 )]
 position = Vector2( 53, -8 )
@@ -103,10 +119,19 @@ position = Vector2( -455, -229 )
 
 [node name="SceneChanger" parent="." instance=ExtResource( 9 )]
 position = Vector2( -256, -407 )
+scene_path = "res://world/areas/anxiety/anxiety2.tscn"
 
 [node name="CollisionShape2D" parent="SceneChanger" index="0"]
 position = Vector2( 20.5, -23 )
 shape = SubResource( 2 )
+
+[node name="AnxietyParticles" type="Particles2D" parent="."]
+position = Vector2( -286, -59 )
+amount = 2875
+lifetime = 2.1
+preprocess = 2.29
+visibility_rect = Rect2( -2500, -400, 5000, 800 )
+process_material = SubResource( 10 )
 
 [editable path="WorldEnvironment"]
 [editable path="SceneChanger"]

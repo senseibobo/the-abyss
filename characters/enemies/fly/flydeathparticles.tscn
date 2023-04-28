@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://characters/enemies/deathparticles.gd" type="Script" id=1]
 
 [sub_resource type="Curve" id=4]
 _data = [ Vector2( 0, 1 ), 0.0, -3.204, 0, 0, Vector2( 0.525253, 0.335227 ), -0.675, -0.675, 0, 0, Vector2( 1, 0.0090909 ), -0.0339622, 0.0, 0, 0 ]
@@ -24,3 +26,4 @@ lifetime = 0.25
 one_shot = true
 explosiveness = 0.87
 process_material = SubResource( 5 )
+script = ExtResource( 1 )

@@ -28,7 +28,7 @@ scale = 23.68
 scale_curve = SubResource( 3 )
 color_ramp = SubResource( 6 )
 
-[node name="FlyDeathParticles" type="Particles2D"]
+[node name="SlimeDeathParticles" type="Particles2D"]
 emitting = false
 amount = 88
 lifetime = 0.25

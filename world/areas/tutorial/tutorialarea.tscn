@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=1]
 [ext_resource path="res://will/will.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=5]
 [ext_resource path="res://world/env.tscn" type="PackedScene" id=6]
+[ext_resource path="res://world/areas/tutorial/tutorialarea.gd" type="Script" id=7]
 [ext_resource path="res://assets/textures/spotlight.png" type="Texture" id=8]
 [ext_resource path="res://world/tools/scenechanger.tscn" type="PackedScene" id=9]
 
@@ -79,6 +80,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [ true ]
 }
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 17 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "show_ui"
+} ]
+}
 
 [sub_resource type="NavigationPolygon" id=1]
 vertices = PoolVector2Array( 16, -55, 568, -80, 545, 96, 102, 96, 43, 113, 106, 229, 53, 225 )
@@ -96,6 +111,7 @@ _data = {
 }
 
 [node name="TutorialArea" type="Node2D"]
+script = ExtResource( 7 )
 
 [node name="Will" parent="." instance=ExtResource( 2 )]
 position = Vector2( 809, -391 )
