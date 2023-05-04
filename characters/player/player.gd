@@ -92,26 +92,30 @@ func detach_from_will():
 var hit_timer: float = 0.0
 var hit_invincibility: float = 0.5
 
-func hit():
+func hit(amount: float = 20.0):
 	if dead: return
 	if hit_timer > 0: return
 	health -= 20.0
 	if health <= 0.0:
 		death()
 	hit_timer = hit_invincibility
-	var tween = create_tween()
+	$HitOverlay/ColorRect.color = Color.red
+	var tween = create_tween().set_parallel(true)
 	cr.color = Color.red
 	tween.tween_property(cr,"color",Color.white,0.2)
+	tween.tween_property($HitOverlay/ColorRect,"color",Color(1.0,0.0,0.0,0.0),0.3)
 	Global.camera.shake(7,2.0,0.3)
 	print("the player has been hit.")
 
 
 var dead: bool = false
 func death():
+	var tween = create_tween()
+	tween.tween_property(Engine,"time_scale",0.2,0.5)
 	dead = true
 	$DeathParticles.emitting = true
 	$ColorRect.visible = false
-	var tween = create_tween()
+	tween = create_tween()
 	tween.tween_property($Light2D,"texture_scale",0.0,0.5)
 	var death = preload("res://mechanics/death.tscn").instance()
 	get_parent().add_child(death)

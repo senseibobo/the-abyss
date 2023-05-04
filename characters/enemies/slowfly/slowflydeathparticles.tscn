@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://characters/enemies/deathparticles.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 1 ), 0.0, -3.204, 0, 0, Vector2( 0.525253, 0.335227 ), -0.675, -0.675, 0, 0, Vector2( 1, 0.0090909 ), -0.0339622, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 171.17
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 23.68
+scale_curve = SubResource( 3 )
+color = Color( 0.678431, 0.678431, 0.678431, 1 )
+
+[node name="SlowFlyDeathParticles" type="Particles2D"]
+emitting = false
+amount = 88
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.87
+process_material = SubResource( 5 )
+script = ExtResource( 1 )

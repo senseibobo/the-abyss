@@ -5,7 +5,7 @@ var acceleration: float = 100.0
 var deceleration: float = 200.0
 
 
-func hit():
+func hit(amount: float = 20.0):
 	$Particles2D.emitting = true
 	health -= 40.0
 	if health <= 0.0:

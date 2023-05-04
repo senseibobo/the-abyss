@@ -24,4 +24,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("restart"):
+		var tween = Global.create_tween()
+		tween.tween_property(Engine,"time_scale",1.0,0.5)
 		Transition.restart_scene()

@@ -11,3 +11,10 @@ func show_ui(visible: bool = true):
 
 func _ready() -> void:
 	randomize()
+
+func timer(time: float):
+	var timer = Timer.new()
+	add_child(timer)
+	timer.connect("timeout",timer,"queue_free")
+	timer.start(time)
+	return timer

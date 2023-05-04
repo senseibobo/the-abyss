@@ -54,7 +54,7 @@ func _physics_process(delta):
 		
 	process_shake(delta)
 
-var shake_duration: float
+var shake_duration: float = 1.0
 var shake_time: float
 var shake_magnitude: float
 var shake_frequency: float
@@ -64,11 +64,12 @@ var noise = OpenSimplexNoise.new()
 func process_shake(delta):
 	if shake_time <= 0.0: return
 	noise.seed = randi()
-	offset.x = (noise.get_noise_1d(shake_time*100.0*shake_frequency)-0.5)*shake_magnitude*shake_time/shake_duration
-	offset.y = (noise.get_noise_1d(-shake_time*100.0*shake_frequency)-0.5)*shake_magnitude*shake_time/shake_duration
+	offset.x = (noise.get_noise_1d(shake_time*10.0*shake_frequency))*shake_magnitude*shake_time/shake_duration
+	offset.y = (noise.get_noise_1d(-shake_time*10.0*shake_frequency))*shake_magnitude*shake_time/shake_duration
 	shake_time -= delta
 
 func shake(magnitude,frequency,time):
+	if magnitude < shake_magnitude*shake_time/shake_duration: return
 	shake_duration = time
 	shake_time = time
 	shake_magnitude = magnitude

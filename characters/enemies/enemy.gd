@@ -1,7 +1,7 @@
 extends Character
 class_name Enemy
 
-func hit():
+func hit(amount: float = 20.0):
 	print("hit")
 
 func _ready() -> void:

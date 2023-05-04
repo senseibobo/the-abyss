@@ -20,7 +20,7 @@ var charge_speed: float = 1.0
 
 export var vision_range: float = 200.0
 
-func hit():
+func hit(amount: float = 20.0):
 	$HitParticles.emitting = true
 	health -= 40.0
 	if health <= 0.0:

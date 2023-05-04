@@ -1,0 +1,181 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://will/will.tscn" type="PackedScene" id=1]
+[ext_resource path="res://world/env.tscn" type="PackedScene" id=2]
+[ext_resource path="res://characters/enemies/slowfly/slowfly.tscn" type="PackedScene" id=3]
+[ext_resource path="res://characters/player/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://world/areas/insecurity/platform.tscn" type="PackedScene" id=5]
+[ext_resource path="res://characters/player/camera/playercamera.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/tilesets/ground1.tres" type="TileSet" id=7]
+[ext_resource path="res://mechanics/grappleswingcheck.gd" type="Script" id=8]
+[ext_resource path="res://world/tools/scenechanger.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise;
+uniform sampler2D noise2;
+uniform float r = 2.0;
+uniform vec2 camera_position;
+uniform vec2 pc_position;
+uniform float density: hint_range(0.0,1.0) = 0.6;
+
+float tw(float a) {
+	return mod(a+0.5,1.0)-0.5;
+}
+
+void fragment() {
+	vec2 NUV = SCREEN_UV;
+	vec2 px = TEXTURE_PIXEL_SIZE*r;
+	vec2 offset = vec2(texture(noise,vec2(TIME)).r);
+	float n1 = texture(noise,NUV+camera_position/vec2(600.0,-360.0)-mod(TIME/20.0,1.0)).r;
+	float n2 = texture(noise,NUV+camera_position/vec2(600.0,-360.0)+TIME/50.0).r;
+	COLOR.a = density - abs(n1*n2+0.1);
+	//vec2 np = UV;
+	//np.x = clamp(np.x,0.1*px.x,1.0-0.1*px.x);
+	//np.y = clamp(np.y,0.1*px.y,1.0-0.1*px.y);
+	//COLOR.a -= distance(np,UV)*5.0;
+	float x1 = SCREEN_UV.x;
+	float y1 = SCREEN_UV.y;
+	vec2 d = vec2(1.0,-1.0)*pc_position+vec2(0.0,1.0);
+	float x2 = d.x;
+	float y2 = d.y;
+	float dist = sqrt(pow(x1-x2,2.0)+pow(y1-y2,2.0)*9.0/16.0);
+	COLOR.a += dist*2.0-0.5;
+	COLOR.a = max(COLOR.a,0.0);
+}"
+
+[sub_resource type="OpenSimplexNoise" id=9]
+octaves = 2
+period = 24.3
+persistence = 1.0
+lacunarity = 0.1
+
+[sub_resource type="NoiseTexture" id=5]
+seamless = true
+noise = SubResource( 9 )
+
+[sub_resource type="OpenSimplexNoise" id=10]
+seed = 9
+octaves = 2
+period = 24.3
+persistence = 1.0
+lacunarity = 0.1
+
+[sub_resource type="NoiseTexture" id=7]
+as_normalmap = true
+noise = SubResource( 10 )
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = SubResource( 11 )
+shader_param/r = 200.0
+shader_param/camera_position = Vector2( 500, 500 )
+shader_param/pc_position = Vector2( 0, 0 )
+shader_param/density = 0.924
+shader_param/noise = SubResource( 5 )
+shader_param/noise2 = SubResource( 7 )
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( -629, 9, 67, 10, 60, 55, -630, 50, -243, -228, -479, -130, -479, -149, -246, -264, 179, -262, 174, -232 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ), PoolIntArray( 4, 5, 6, 7 ), PoolIntArray( 7, 8, 9, 4 ) ]
+outlines = [ PoolVector2Array( -629, 9, 67, 10, 60, 55, -630, 50 ), PoolVector2Array( -479, -149, -479, -130, -243, -228, 174, -232, 179, -262, -246, -264 ) ]
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 155.5, 34.75 )
+
+[sub_resource type="CanvasItemMaterial" id=13]
+render_priority = 57
+blend_mode = 2
+light_mode = 2
+
+[node name="Anxiety1" type="Node2D"]
+
+[node name="G" type="TileMap" parent="."]
+modulate = Color( 0, 0.643137, 0.866667, 1 )
+scale = Vector2( 0.125, 0.125 )
+tile_set = ExtResource( 7 )
+cell_size = Vector2( 128, 128 )
+format = 1
+tile_data = PoolIntArray( -1638385, 0, 8, -1638384, 0, 10, -1638383, 0, 10, -1638382, 0, 10, -1638381, 0, 10, -1638380, 0, 10, -1638379, 0, 11, -1507393, 0, 8, -1507392, 0, 10, -1507391, 0, 10, -1507390, 0, 10, -1507389, 0, 10, -1507388, 0, 10, -1507387, 0, 10, -1507386, 0, 10, -1507385, 0, 6, -1507384, 0, 196611, -1572850, 0, 196609, -1572849, 0, 196613, -1572848, 0, 196617, -1572847, 0, 196617, -1572846, 0, 196617, -1572845, 0, 196617, -1572844, 0, 196617, -1572843, 0, 196614, -1572842, 0, 196611, -1441862, 0, 8, -1441861, 0, 10, -1441860, 0, 10, -1441859, 0, 10, -1441858, 0, 10, -1441857, 0, 65541, -1441856, 0, 131081, -1441855, 0, 131081, -1441854, 0, 131081, -1441853, 0, 131081, -1441852, 0, 131081, -1441851, 0, 131081, -1441850, 0, 131081, -1441849, 0, 131083, -1376328, 0, 8, -1376327, 0, 10, -1376326, 0, 65541, -1376325, 0, 131081, -1376324, 0, 131081, -1376323, 0, 131081, -1376322, 0, 131081, -1376321, 0, 131081, -1376320, 0, 131081, -1376319, 0, 131081, -1376318, 0, 131081, -1376317, 0, 131081, -1376316, 0, 131081, -1376315, 0, 131081, -1376314, 0, 131078, -1376313, 0, 196619, -1310794, 0, 8, -1310793, 0, 10, -1310792, 0, 65541, -1310791, 0, 131081, -1310790, 0, 131081, -1310789, 0, 131081, -1310788, 0, 131081, -1310787, 0, 131081, -1310786, 0, 131081, -1310785, 0, 131081, -1310784, 0, 131081, -1310783, 0, 131081, -1310782, 0, 131081, -1310781, 0, 131081, -1310780, 0, 131081, -1310779, 0, 131078, -1310778, 0, 196619, -1245259, 0, 8, -1245258, 0, 65541, -1245257, 0, 131081, -1245256, 0, 131081, -1245255, 0, 131081, -1245254, 0, 131081, -1245253, 0, 131081, -1245252, 0, 131081, -1245251, 0, 131081, -1245250, 0, 131081, -1245249, 0, 131081, -1245248, 0, 131081, -1245247, 0, 131081, -1245246, 0, 131081, -1245245, 0, 131081, -1245244, 0, 131078, -1245243, 0, 196619, -1179723, 0, 196616, -1179722, 0, 196617, -1179721, 0, 131077, -1179720, 0, 131081, -1179719, 0, 131081, -1179718, 0, 131081, -1179717, 0, 131081, -1179716, 0, 131081, -1179715, 0, 131081, -1179714, 0, 131081, -1179713, 0, 131081, -1179712, 0, 131081, -1179711, 0, 131081, -1179710, 0, 131078, -1179709, 0, 196617, -1179708, 0, 196619, -1114185, 0, 196616, -1114184, 0, 131077, -1114183, 0, 131081, -1114182, 0, 131081, -1114181, 0, 131081, -1114180, 0, 131081, -1114179, 0, 131081, -1114178, 0, 131081, -1114177, 0, 131078, -1114176, 0, 196617, -1114175, 0, 196617, -1114174, 0, 196619, -1048648, 0, 196616, -1048647, 0, 131077, -1048646, 0, 131081, -1048645, 0, 131081, -1048644, 0, 131078, -1048643, 0, 196617, -1048642, 0, 196617, -1048641, 0, 196619, -983111, 0, 196616, -983110, 0, 196617, -983109, 0, 196617, -983108, 0, 196619, -589860, 0, 8, -589859, 0, 10, -589858, 0, 10, -589857, 0, 10, -589856, 0, 10, -589855, 0, 6, -589854, 0, 196611, -524324, 0, 196616, -524323, 0, 131077, -524322, 0, 131081, -524321, 0, 131081, -524320, 0, 131078, -524319, 0, 196619, -458787, 0, 196616, -458786, 0, 196617, -458785, 0, 196617, -458784, 0, 196619, -131067, 0, 196609, -131066, 0, 196610, -131065, 0, 196611 )
+script = ExtResource( 8 )
+grapple = true
+
+[node name="N" type="TileMap" parent="."]
+modulate = Color( 0.992157, 1, 0.87451, 1 )
+scale = Vector2( 0.125, 0.125 )
+tile_set = ExtResource( 7 )
+cell_size = Vector2( 128, 128 )
+format = 1
+tile_data = PoolIntArray( -1638413, 0, 196609, -1638412, 0, 196610, -1638411, 0, 3, -1703920, 0, 8, -1703919, 0, 10, -1703918, 0, 10, -1703917, 0, 10, -1703916, 0, 10, -1703915, 0, 11, -1572875, 0, 131073, -1572874, 0, 3, -1638387, 0, 196609, -1638386, 0, 5, -1638385, 0, 6, -1638384, 0, 196613, -1638383, 0, 196617, -1638382, 0, 196617, -1638381, 0, 196617, -1638380, 0, 196617, -1638379, 0, 131082, -1638378, 0, 11, -1507338, 0, 131073, -1507337, 0, 196611, -1572850, 0, 196616, -1572849, 0, 196619, -1572843, 0, 196616, -1572842, 0, 196614, -1572841, 0, 5, -1572840, 0, 10, -1572839, 0, 11, -1441800, 0, 196609, -1441799, 0, 3, -1507305, 0, 196616, -1507304, 0, 131077, -1507303, 0, 131083, -1376263, 0, 131073, -1376262, 0, 196610, -1376261, 0, 196610, -1376260, 0, 3, -1441768, 0, 196616, -1441767, 0, 131079, -1310724, 0, 131073, -1310723, 0, 196610, -1310722, 0, 196610, -1310721, 0, 196610, -1376256, 0, 196610, -1376255, 0, 196610, -1376254, 0, 196611, -1376231, 0, 65536, -1310716, 0, 196609, -1310715, 0, 196610, -1310714, 0, 196610, -1310713, 0, 196610, -1310712, 0, 196610, -1310711, 0, 196610, -1310710, 0, 196610, -1310709, 0, 3, -1310695, 0, 65540, -1310694, 0, 11, -1245173, 0, 131073, -1245172, 0, 196610, -1245171, 0, 196610, -1245170, 0, 196610, -1245169, 0, 196611, -1245159, 0, 65544, -1245158, 0, 131083, -1179623, 0, 65544, -1179622, 0, 131083, -1114087, 0, 196616, -1114086, 0, 131079, -1048550, 0, 65540, -1048549, 0, 11, -983014, 0, 131076, -983013, 0, 196619, -917479, 0, 8, -917478, 0, 65543, -851944, 0, 1, -851943, 0, 196613, -851942, 0, 196619, -720930, 0, 8, -720929, 0, 10, -720928, 0, 10, -720927, 0, 10, -720926, 0, 10, -720925, 0, 10, -720924, 0, 6, -720923, 0, 196611, -720905, 0, 1, -720904, 0, 196611, -786408, 0, 131072, -655395, 0, 8, -655394, 0, 65541, -655393, 0, 131081, -655392, 0, 131081, -655391, 0, 131081, -655390, 0, 131081, -655389, 0, 131078, -655388, 0, 196619, -655373, 0, 1, -655372, 0, 196610, -655371, 0, 196610, -655370, 0, 196610, -655369, 0, 131075, -589861, 0, 8, -589860, 0, 6, -589859, 0, 196613, -589858, 0, 196617, -589857, 0, 196617, -589856, 0, 196617, -589855, 0, 196617, -589854, 0, 196617, -589853, 0, 196619, -589839, 0, 1, -589838, 0, 196610, -589837, 0, 131075, -524325, 0, 196616, -524324, 0, 196619, -524305, 0, 1, -524304, 0, 196610, -524303, 0, 131075, -458771, 0, 1, -458770, 0, 196610, -458769, 0, 131075, -393236, 0, 1, -393235, 0, 131075, -458727, 0, 0, -327702, 0, 1, -327701, 0, 196610, -327700, 0, 131075, -393191, 0, 65536, -262175, 0, 196609, -262174, 0, 196610, -262173, 0, 196610, -262172, 0, 196610, -262171, 0, 196610, -262170, 0, 196610, -262169, 0, 196610, -262168, 0, 196610, -262167, 0, 196610, -262166, 0, 131075, -327655, 0, 65536, -262119, 0, 65536, -196583, 0, 65536, -131047, 0, 65536, -65511, 0, 65536, 25, 0, 65536, 65561, 0, 65536, 131097, 0, 65536, 196633, 0, 65536, 327641, 0, 196609, 327642, 0, 196611, 327648, 0, 196609, 327649, 0, 196610, 327650, 0, 196611, 327655, 0, 196609, 327656, 0, 196610, 327657, 0, 196611, 327664, 0, 196609, 327665, 0, 196610, 327666, 0, 196610, 327667, 0, 196610, 327668, 0, 196610, 327669, 0, 196610, 327670, 0, 196610, 327671, 0, 196610, 327672, 0, 196610, 327673, 0, 196610, 327674, 0, 196610, 327675, 0, 196610, 327676, 0, 196610, 327677, 0, 196610, 327678, 0, 196610, 327679, 0, 196610, 262144, 0, 196610, 262145, 0, 196610, 262146, 0, 196610, 262147, 0, 196610, 262148, 0, 196610, 262149, 0, 196610, 262150, 0, 196610, 262151, 0, 196610, 262152, 0, 196610, 262153, 0, 196610, 262154, 0, 196610, 262155, 0, 196610, 262156, 0, 196610, 262157, 0, 196610, 262158, 0, 196610, 262159, 0, 196610, 262160, 0, 196610, 262161, 0, 196610, 262162, 0, 196610, 262163, 0, 196610, 262164, 0, 196610, 262165, 0, 196610, 262166, 0, 196610, 262167, 0, 196610, 262168, 0, 196610, 262169, 0, 131075 )
+script = ExtResource( 8 )
+
+[node name="Player" parent="." instance=ExtResource( 4 )]
+position = Vector2( 114, -207 )
+
+[node name="Light2D" parent="Player" index="2"]
+texture_scale = 1.05
+energy = 1.0
+
+[node name="Will" parent="." instance=ExtResource( 1 )]
+
+[node name="WorldEnvironment" parent="." instance=ExtResource( 2 )]
+
+[node name="Bg1" parent="WorldEnvironment/ParallaxBackground/ParallaxLayer" index="0"]
+modulate = Color( 1, 0, 0, 1 )
+
+[node name="ColorRect" parent="WorldEnvironment/PlayerFog" index="0"]
+visible = false
+material = SubResource( 12 )
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 0.0
+
+[node name="PlayerCamera" parent="." instance=ExtResource( 6 )]
+position = Vector2( 53, -8 )
+mode = 2
+path_to_player = NodePath("../Player")
+path_to_camera_area = NodePath("../CameraArea")
+
+[node name="CameraArea" type="Navigation2D" parent="."]
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="CameraArea"]
+navpoly = SubResource( 1 )
+
+[node name="Flies" type="Node2D" parent="."]
+
+[node name="SlowFly" parent="Flies" instance=ExtResource( 3 )]
+position = Vector2( 74, 26 )
+
+[node name="SlowFly2" parent="Flies" instance=ExtResource( 3 )]
+position = Vector2( -99, -253 )
+
+[node name="SceneChanger" parent="." instance=ExtResource( 9 )]
+position = Vector2( -256, -407 )
+scene_path = "res://world/areas/anxiety/anxiety2.tscn"
+
+[node name="CollisionShape2D" parent="SceneChanger" index="0"]
+position = Vector2( 20.5, -23 )
+shape = SubResource( 2 )
+
+[node name="Platforms" type="Node2D" parent="."]
+
+[node name="Platform" parent="Platforms" instance=ExtResource( 5 )]
+position = Vector2( -11, -184 )
+
+[node name="Platform2" parent="Platforms" instance=ExtResource( 5 )]
+position = Vector2( 125, -184 )
+
+[node name="Platform3" parent="Platforms" instance=ExtResource( 5 )]
+position = Vector2( 274, -184 )
+
+[node name="Dark" type="ColorRect" parent="."]
+material = SubResource( 13 )
+margin_left = -1868.0
+margin_top = -1158.0
+margin_right = 1666.0
+margin_bottom = 1261.0
+
+[editable path="Player"]
+[editable path="WorldEnvironment"]
+[editable path="SceneChanger"]
